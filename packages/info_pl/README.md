@@ -110,5 +110,16 @@ Future<void> _getDeviceInfo() async {
 }
 ```
 
+A distinctive UUID created with ID, Android_ID and Board data is provided. This created UUID is accessed from the DeviceInfo class, like other data obtained.
+
+```dart
+import 'package:info_pl/info_pl.dart';
+
+static final InfoPl _infoPl = InfoPl();
+DeviceInfo? _deviceInfo = await _infoPl.init();
+String? uuId = _deviceInfo!.uuId;
+```
+
+---
 
 See the example app for more complex examples.
