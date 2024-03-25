@@ -1,0 +1,5 @@
+#!/bin/sh
+
+adb shell pm path com.sparksign.info_pl_example
+
+# /data/app/com.sparksign.info_pl_example-VUvwvWOPZsEZ3aY8Diyc_A==/base.apk
