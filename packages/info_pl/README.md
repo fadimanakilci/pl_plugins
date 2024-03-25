@@ -46,6 +46,8 @@ Future<void> _getDeviceInfo() async {
 }
 ```
 
+### Info Text Generator Example
+
 This plugin offers a data method that provides platform-specific device information in a generic manner.
 Data obtained through this method can be visualized in an organized and readable manner.
 
@@ -90,6 +92,16 @@ Future<void> _getDeviceInfo() async {
 }
 ```
 
+<p align="center">
+   <a><img src="https://github.com/fadimanakilci/pl_plugins/blob/main/packages/info_pl/assets/screenshots/Screenshot_20240325_233710.png"/></a>
+   <a><img src="https://github.com/fadimanakilci/pl_plugins/blob/main/packages/info_pl/assets/screenshots/Screenshot_20240325_234120.png"/></a>
+   <a><img src="https://github.com/fadimanakilci/pl_plugins/blob/main/packages/info_pl/assets/screenshots/Screenshot_20240325_234144.png"/></a>
+   <br/><br/>
+  <span>Screenshots of the info text generator used</span>
+</p>
+
+### Individual Access to Data via DeviceInfo Example
+
 Furthermore, individual access to the data obtained through this method is also possible via the `DeviceInfo` class.
 
 ```dart
@@ -109,6 +121,8 @@ Future<void> _getDeviceInfo() async {
   }
 }
 ```
+
+### Generated UUID Example
 
 A distinctive `UUID` created with `ID`, `android_ID` and `board` data is provided. This created `UUID` is accessed from the `DeviceInfo` class, like other data obtained.
 
