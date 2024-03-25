@@ -1,7 +1,8 @@
 name: info_pl
 description: Flutter project that retrieves a device's information.
 version: 0.0.1
-homepage:
+repository: https://github.com/fadimanakilci/pl_plugins/tree/main/packages/info_pl
+issue_tracker: https://github.com/fadimanakilci/pl_plugins/labels/info_pl
 
 environment:
   sdk: '>=3.1.3 <4.0.0'

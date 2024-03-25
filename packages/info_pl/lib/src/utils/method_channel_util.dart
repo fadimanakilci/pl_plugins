@@ -15,7 +15,4 @@ class MethodChannelUtil {
 
   static const MethodChannel methodChannel =
   MethodChannel('$pluginPath/methods');
-
-  static const EventChannel accelerometerEventChannel =
-  EventChannel('$pluginPath/infos');
 }
