@@ -110,7 +110,7 @@ Future<void> _getDeviceInfo() async {
 }
 ```
 
-A distinctive UUID created with ID, Android_ID and Board data is provided. This created UUID is accessed from the DeviceInfo class, like other data obtained.
+A distinctive `UUID` created with `ID`, `android_ID` and `board` data is provided. This created `UUID` is accessed from the `DeviceInfo` class, like other data obtained.
 
 ```dart
 import 'package:info_pl/info_pl.dart';
