@@ -93,9 +93,9 @@ Future<void> _getDeviceInfo() async {
 ```
 
 <p align="center">
-   <a><img width="30%" src="https://github.com/fadimanakilci/pl_plugins/blob/main/packages/info_pl/assets/screenshots/Screenshot_20240325_233710.png"/></a>
-   <a><img width="30%" src="https://github.com/fadimanakilci/pl_plugins/blob/main/packages/info_pl/assets/screenshots/Screenshot_20240325_234120.png"/></a>
-   <a><img width="30%" src="https://github.com/fadimanakilci/pl_plugins/blob/main/packages/info_pl/assets/screenshots/Screenshot_20240325_234144.png"/></a>
+   <a><img width="30%" src="https://raw.githubusercontent.com/fadimanakilci/pl_plugins/main/packages/info_pl/assets/screenshots/Screenshot_20240325_233710.png"/></a>
+   <a><img width="30%" src="https://raw.githubusercontent.com/fadimanakilci/pl_plugins/main/packages/info_pl/assets/screenshots/Screenshot_20240325_234120.png"/></a>
+   <a><img width="30%" src="https://raw.githubusercontent.com/fadimanakilci/pl_plugins/main/packages/info_pl/assets/screenshots/Screenshot_20240325_234144.png"/></a>
    <br/><br/>
   <span>Screenshots of the info text generator used</span>
 </p>
