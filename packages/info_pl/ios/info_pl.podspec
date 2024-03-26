@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'info_pl'
-  s.version          = '0.0.1'
+  s.version          = '0.0.2'
   s.summary          = 'Flutter project that retrieves a device's information.'
   s.description      = <<-DESC
 Flutter project that retrieves a device's information.
