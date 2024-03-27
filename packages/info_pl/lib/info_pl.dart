@@ -1,4 +1,3 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -14,7 +13,8 @@ import 'package:info_pl/src/business/services/info_pl_platform_interface.dart';
 import 'package:info_pl/src/domain/models/device_info_model.dart';
 import 'package:logging/logging.dart';
 
-export 'package:info_pl/src/domain/models/device_info_model.dart' show DeviceInfo;
+export 'package:info_pl/src/domain/models/device_info_model.dart'
+    show DeviceInfo;
 
 class InfoPl {
   static InfoPl? _singleton;

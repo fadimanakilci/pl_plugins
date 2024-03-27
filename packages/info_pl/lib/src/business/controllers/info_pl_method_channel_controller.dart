@@ -28,7 +28,8 @@ class InfoPlMethodChannelController implements InfoPlPlatformInterface {
 
     Completer completer = Completer<DeviceInfo?>();
 
-    final Map<dynamic, dynamic>? info = await methodChannel.invokeMethod('getDeviceInfo');
+    final Map<dynamic, dynamic>? info =
+        await methodChannel.invokeMethod('getDeviceInfo');
     deviceInfoModel = info == null ? null : DeviceInfo.fromMap(info);
 
     completer.complete(deviceInfoModel);

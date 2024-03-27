@@ -34,17 +34,17 @@ class VersionInfoModel {
   });
 
   Map<String, dynamic> toJson() => {
-    'codename': codename,
-    'incremental': incremental,
-    'release': release,
-    'sdkInt': sdkInt,
-    'mediaPerformanceClass': mediaPerformanceClass,
-    'releaseOrCodename': releaseOrCodename,
-    'releaseOrPreviewDisplay': releaseOrPreviewDisplay,
-    'baseOS': baseOS,
-    'previewSdkInt': previewSdkInt,
-    'securityPatch': securityPatch,
-  };
+        'codename': codename,
+        'incremental': incremental,
+        'release': release,
+        'sdkInt': sdkInt,
+        'mediaPerformanceClass': mediaPerformanceClass,
+        'releaseOrCodename': releaseOrCodename,
+        'releaseOrPreviewDisplay': releaseOrPreviewDisplay,
+        'baseOS': baseOS,
+        'previewSdkInt': previewSdkInt,
+        'securityPatch': securityPatch,
+      };
 
   /// Return as `Map`
   Map<String, dynamic> toMap() {

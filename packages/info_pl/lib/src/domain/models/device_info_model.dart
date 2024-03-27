@@ -8,7 +8,6 @@
  * Created by Fadimana Kilci  <fadimekilci07@gmail.com>, February 2024
  */
 
-
 import 'package:info_pl/src/domain/models/display_info_model.dart';
 import 'package:info_pl/src/domain/models/version_info_model.dart';
 
@@ -109,7 +108,7 @@ class DeviceInfo {
     required List<String> supported64BitAbis,
     required List<String> supportedAbis,
     required List<String> systemFeatures,
-  }) : systemFeatures = List<String>.unmodifiable(systemFeatures),
+  })  : systemFeatures = List<String>.unmodifiable(systemFeatures),
         supported32BitAbis = List<String>.unmodifiable(supported32BitAbis),
         supported64BitAbis = List<String>.unmodifiable(supported64BitAbis),
         supportedAbis = List<String>.unmodifiable(supportedAbis);
@@ -156,7 +155,8 @@ class DeviceInfo {
       wifiUID: info['wifiUID'],
       myProcessName: info['myProcessName'],
       getStartRequestedUptimeMillis: info['getStartRequestedUptimeMillis'],
-      getStartRequestedElapsedRealtime: info['getStartRequestedElapsedRealtime'],
+      getStartRequestedElapsedRealtime:
+          info['getStartRequestedElapsedRealtime'],
       displayMetrics: DisplayInfoModel.fromMap(info['displayMetrics']),
       version: VersionInfoModel.fromMap(info['version']),
       supported32BitAbis: _fromList(info['supported32BitAbis'] ?? <String>[]),
@@ -169,53 +169,53 @@ class DeviceInfo {
   @override
   String toString() {
     return '------------------>>  DEVICE INFO <<------------------\n\n\n'
-      '[DEVICE_ID]: $deviceId\n\n'
-      '[UUID]: $uuId\n\n'
-      '[MODEL]: $model\n\n'
-      '[ID]: $id\n\n'
-      '[MANUFACTURER]: $manufacturer\n\n'
-      '[BRAND]: $brand\n\n'
-      '[USER]: $user\n\n'
-      '[TYPE]: $type\n\n'
-      '[BOARD]: $board\n\n'
-      '[HOST]: $host\n\n'
-      '[FINGER_PRINT]: $fingerPrint\n\n'
-      '[BOOTLOADER]: $bootloader\n\n'
-      '[DEVICE]: $device\n\n'
-      '[DISPLAY]: $display\n\n'
-      '[HARDWARE]: $hardware\n\n'
-      '[PRODUCT]: $product\n\n'
-      '[TAGS]: $tags\n\n'
-      '[IS_PHYSICAL_DEVICE]: $isPhysicalDevice\n\n'
-      '[SIM_OPERATOR]: $simOperator\n\n'
-      '[SIM_OPERATOR_NAME]: $simOperatorName\n\n'
-      '[SIM_COUNTRY_ISO]: $simCountryIso\n\n'
-      '[NETWORK_OPERATOR]: $networkOperator\n\n'
-      '[NETWORK_OPERATOR_NAME]: $networkOperatorName\n\n'
-      '[NETWORK_COUNTRY_ISO]: $networkCountryIso\n\n'
-      '[MMS_USER_AGENT]: $mmsUserAgent\n\n'
-      '[MMS_UA_PROF_URL]: $mmsUAProfUrl\n\n'
-      '[MY_UID]: $myUid\n\n'
-      '[SERIAL_NUMBER]: $serialNumber\n\n'
-      '[ELAPSED_CPU_TIME]: $getElapsedCpuTime\n\n'
-      '[EXCLUSIVE_CORES]: $getExclusiveCores\n\n'
-      '[START_UPTIME_MILLIS]: $getStartUptimeMillis\n\n'
-      '[START_ELAPSED_REALTIME]: $getStartElapsedRealtime\n\n'
-      '[NETWORK_SPECIFIER]: $networkSpecifier\n\n'
-      '[IS_ISOLATED]: $isIsolated\n\n'
-      '[MANUFACTURER_CODE]: $manufacturerCode\n\n'
-      '[TYPE_ALLOCATION_CODE]: $typeAllocationCode\n\n'
-      '[BLUETOOTH_UID]: $bluetoothUID\n\n'
-      '[WIFI_UID]: $wifiUID\n\n'
-      '[MY_PROCESS_NAME]: $myProcessName\n\n'
-      '[START_REQUESTED_UPTIME_MILLIS]: $getStartRequestedUptimeMillis\n\n'
-      '[START_REQUESTED_ELAPSED_REALTIME]: $getStartRequestedElapsedRealtime\n\n'
-      '[DISPLAY_METRICS]: ${displayMetrics.toString()}\n\n'
-      '[VERSION]: ${version.toString()}\n\n'
-      '[SUPPORTED_32_BIT_ABIS]: $supported32BitAbis\n\n'
-      '[SUPPORTED_64_BIT_ABIS]: $supported64BitAbis\n\n'
-      '[SUPPORTED_ABIS]: $supportedAbis\n\n'
-      '[SYSTEM_FEATURES]: $systemFeatures\n\n';
+        '[DEVICE_ID]: $deviceId\n\n'
+        '[UUID]: $uuId\n\n'
+        '[MODEL]: $model\n\n'
+        '[ID]: $id\n\n'
+        '[MANUFACTURER]: $manufacturer\n\n'
+        '[BRAND]: $brand\n\n'
+        '[USER]: $user\n\n'
+        '[TYPE]: $type\n\n'
+        '[BOARD]: $board\n\n'
+        '[HOST]: $host\n\n'
+        '[FINGER_PRINT]: $fingerPrint\n\n'
+        '[BOOTLOADER]: $bootloader\n\n'
+        '[DEVICE]: $device\n\n'
+        '[DISPLAY]: $display\n\n'
+        '[HARDWARE]: $hardware\n\n'
+        '[PRODUCT]: $product\n\n'
+        '[TAGS]: $tags\n\n'
+        '[IS_PHYSICAL_DEVICE]: $isPhysicalDevice\n\n'
+        '[SIM_OPERATOR]: $simOperator\n\n'
+        '[SIM_OPERATOR_NAME]: $simOperatorName\n\n'
+        '[SIM_COUNTRY_ISO]: $simCountryIso\n\n'
+        '[NETWORK_OPERATOR]: $networkOperator\n\n'
+        '[NETWORK_OPERATOR_NAME]: $networkOperatorName\n\n'
+        '[NETWORK_COUNTRY_ISO]: $networkCountryIso\n\n'
+        '[MMS_USER_AGENT]: $mmsUserAgent\n\n'
+        '[MMS_UA_PROF_URL]: $mmsUAProfUrl\n\n'
+        '[MY_UID]: $myUid\n\n'
+        '[SERIAL_NUMBER]: $serialNumber\n\n'
+        '[ELAPSED_CPU_TIME]: $getElapsedCpuTime\n\n'
+        '[EXCLUSIVE_CORES]: $getExclusiveCores\n\n'
+        '[START_UPTIME_MILLIS]: $getStartUptimeMillis\n\n'
+        '[START_ELAPSED_REALTIME]: $getStartElapsedRealtime\n\n'
+        '[NETWORK_SPECIFIER]: $networkSpecifier\n\n'
+        '[IS_ISOLATED]: $isIsolated\n\n'
+        '[MANUFACTURER_CODE]: $manufacturerCode\n\n'
+        '[TYPE_ALLOCATION_CODE]: $typeAllocationCode\n\n'
+        '[BLUETOOTH_UID]: $bluetoothUID\n\n'
+        '[WIFI_UID]: $wifiUID\n\n'
+        '[MY_PROCESS_NAME]: $myProcessName\n\n'
+        '[START_REQUESTED_UPTIME_MILLIS]: $getStartRequestedUptimeMillis\n\n'
+        '[START_REQUESTED_ELAPSED_REALTIME]: $getStartRequestedElapsedRealtime\n\n'
+        '[DISPLAY_METRICS]: ${displayMetrics.toString()}\n\n'
+        '[VERSION]: ${version.toString()}\n\n'
+        '[SUPPORTED_32_BIT_ABIS]: $supported32BitAbis\n\n'
+        '[SUPPORTED_64_BIT_ABIS]: $supported64BitAbis\n\n'
+        '[SUPPORTED_ABIS]: $supportedAbis\n\n'
+        '[SYSTEM_FEATURES]: $systemFeatures\n\n';
   }
 
   static List<String> _fromList(List<dynamic> message) {

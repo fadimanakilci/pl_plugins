@@ -1,4 +1,3 @@
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -43,8 +42,10 @@ class _MyAppState extends State<MyApp> {
     try {
       /// İnit Getting Device Info
       _deviceInfo = await _infoPl.init();
+
       /// Edited Device Info String
       deviceInfoText = _deviceInfo.toString();
+
       /// Access to Each Device Info Individually
       deviceBrandAndModel = '${_deviceInfo!.brand} ${_deviceInfo!.model}';
     } on PlatformException {
@@ -71,10 +72,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-                vertical: 15,
-                horizontal: 10
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             child: Text(
               _deviceInfoText ?? 'Loading...',
             ),

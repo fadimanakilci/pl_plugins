@@ -14,5 +14,5 @@ class MethodChannelUtil {
   static const String pluginPath = 'com.sparksign.info_pl';
 
   static const MethodChannel methodChannel =
-  MethodChannel('$pluginPath/methods');
+      MethodChannel('$pluginPath/methods');
 }

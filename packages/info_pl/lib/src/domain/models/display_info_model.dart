@@ -16,7 +16,7 @@ class DisplayInfoModel {
   final double xDpi;
   final double yDpi;
 
-  DisplayInfoModel ({
+  DisplayInfoModel({
     required this.widthPx,
     required this.heightPx,
     required this.xDpi,
@@ -30,18 +30,18 @@ class DisplayInfoModel {
   double get heightInches => heightPx / yDpi;
 
   /// The exact physical size in inches measured diagonally across the display.
-  double sizeInches () {
+  double sizeInches() {
     final width = widthInches;
     final height = heightInches;
     return math.sqrt((width * width) + (height * height));
   }
 
   Map<String, dynamic> toJson() => {
-    'widthPx': widthPx,
-    'heightPx': heightPx,
-    'xDpi': xDpi,
-    'yDpi': yDpi,
-  };
+        'widthPx': widthPx,
+        'heightPx': heightPx,
+        'xDpi': xDpi,
+        'yDpi': yDpi,
+      };
 
   /// Return as `Map`
   Map<String, dynamic> toMap() {

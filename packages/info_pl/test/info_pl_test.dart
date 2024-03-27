@@ -6,13 +6,13 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockInfoPlPlatform
     with MockPlatformInterfaceMixin
     implements InfoPlPlatformInterface {
-
   @override
   Future<DeviceInfo?> init() => Future.value(null);
 }
 
 void main() {
-  final InfoPlPlatformInterface initialPlatform = InfoPlPlatformInterface.instance;
+  final InfoPlPlatformInterface initialPlatform =
+      InfoPlPlatformInterface.instance;
 
   test('$InfoPlPlatformInterface is the default instance', () {
     expect(initialPlatform, isInstanceOf<InfoPlPlatformInterface>());

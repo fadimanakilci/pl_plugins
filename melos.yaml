@@ -1,11 +1,6 @@
-# Name of this workspace, this is used for display purpose on the CLI
-# and on your IDEs.
 name: pl_plugins
-# repository: https://github.com/fluttercommunity/plus_plugins
 
-# Array of globs to search for packages.
-# Instead of one recursive glob, we use multiple globs to avoid
-# searching every single directory in the repo.
+
 packages:
   - apps/**
   - packages/**
@@ -13,9 +8,6 @@ packages:
 
 command:
   version:
-    # Generate commit links in package changelogs.
-    # linkToCommits: true
-    # Skip generation of shared changelogs file in the repo root
     workspaceChangelog: false
 
 
@@ -136,19 +128,23 @@ scripts:
   coverage: >
     melos exec -c 1 --fail-fast --dir-exists=test --ignore="*example*" --ignore="*web*" -- \
       flutter test --coverage
+    
 
   # Check pubspecs are valid and publishable in each package.
   lint:pub: >
     melos exec -c 5 --fail-fast --no-private --ignore="*example*" -- \
       pub publish --dry-run
+    
 
   # Clean things very deeply, can be used to establish "pristine checkout" status
   clean:deep: >
     git clean -x -d -f -q
+    
 
   # Run all targets generally expected in CI for a full local quality check
   qualitycheck: >
     melos run clean:deep && melos clean && melos bootstrap && melos run lint:all && melos run build:all && melos run test:all
+    
 
   # Additional cleanup lifecycle script, executed when `melos clean` is ran.
   postclean: >
