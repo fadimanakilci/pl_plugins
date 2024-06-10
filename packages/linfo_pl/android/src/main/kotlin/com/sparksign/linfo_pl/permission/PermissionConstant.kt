@@ -1,0 +1,125 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright © April 2024 Fadimana Kilci - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * Created by Fadimana Kilci  <fadimekilci07@gmail.com>, February 2024
+ */
+
+package com.sparksign.linfo_pl.permission
+
+import androidx.annotation.IntDef
+import java.lang.annotation.RetentionPolicy
+
+
+object PermissionConstant {
+    const val LOG_TAG: String  = "PERMISSION"
+
+    const val PERMISSION_CODE: Int = 24
+    const val PERMISSION_CODE_IGNORE_BATTERY_OPTIMIZATIONS: Int = 209
+    const val PERMISSION_CODE_MANAGE_EXTERNAL_STORAGE: Int = 210
+    const val PERMISSION_CODE_SYSTEM_ALERT_WINDOW: Int = 211
+    const val PERMISSION_CODE_REQUEST_INSTALL_PACKAGES: Int = 212
+    const val PERMISSION_CODE_ACCESS_NOTIFICATION_POLICY: Int = 213
+    const val PERMISSION_CODE_SCHEDULE_EXACT_ALARM: Int = 214
+
+    // PERMISSION_GROUP
+    const val PERMISSION_GROUP_LOCATION = 3
+    const val PERMISSION_GROUP_LOCATION_ALWAYS = 4
+    const val PERMISSION_GROUP_LOCATION_WHEN_IN_USE = 5
+    const val PERMISSION_GROUP_REMINDERS = 11
+    const val PERMISSION_GROUP_SENSORS = 12
+    const val PERMISSION_GROUP_SMS = 13
+    const val PERMISSION_GROUP_SPEECH = 14
+    const val PERMISSION_GROUP_STORAGE = 15
+    const val PERMISSION_GROUP_IGNORE_BATTERY_OPTIMIZATIONS = 16
+    const val PERMISSION_GROUP_NOTIFICATION = 17
+    const val PERMISSION_GROUP_ACCESS_MEDIA_LOCATION = 18
+    const val PERMISSION_GROUP_ACTIVITY_RECOGNITION = 19
+    const val PERMISSION_GROUP_UNKNOWN = 20
+    const val PERMISSION_GROUP_BLUETOOTH = 21
+    const val PERMISSION_GROUP_MANAGE_EXTERNAL_STORAGE = 22
+    const val PERMISSION_GROUP_SYSTEM_ALERT_WINDOW = 23
+    const val PERMISSION_GROUP_REQUEST_INSTALL_PACKAGES = 24
+    const val PERMISSION_GROUP_CRITICAL_ALERTS = 26
+    const val PERMISSION_GROUP_ACCESS_NOTIFICATION_POLICY = 27
+    const val PERMISSION_GROUP_BLUETOOTH_SCAN = 28
+    const val PERMISSION_GROUP_BLUETOOTH_ADVERTISE = 29
+    const val PERMISSION_GROUP_BLUETOOTH_CONNECT = 30
+    const val PERMISSION_GROUP_NEARBY_WIFI_DEVICES = 31
+    const val PERMISSION_GROUP_SCHEDULE_EXACT_ALARM = 34
+    const val PERMISSION_GROUP_SENSORS_ALWAYS = 35
+    const val PERMISSION_GROUP_BACKGROUND_REFRESH = 39
+
+    // PERMISSION_STATUS
+    const val PERMISSION_STATUS_DENIED = 0
+    const val PERMISSION_STATUS_GRANTED = 1
+    const val PERMISSION_STATUS_RESTRICTED = 2
+    const val PERMISSION_STATUS_LIMITED = 3
+    const val PERMISSION_STATUS_NEVER_ASK_AGAIN = 4
+
+    // SERVICE_STATUS
+    const val SERVICE_STATUS_DISABLED = 0
+    const val SERVICE_STATUS_ENABLED = 1
+    const val SERVICE_STATUS_NOT_APPLICABLE = 2
+
+    // Create annotation - used: @PermissionConstant.ServiceStatus
+//    @Retention(AnnotationRetention.SOURCE)
+//    @IntDef(SERVICE_STATUS_DISABLED, SERVICE_STATUS_ENABLED, SERVICE_STATUS_NOT_APPLICABLE)
+//    internal annotation class ServiceStatus
+
+
+//    @Retention(AnnotationRetention.SOURCE)
+//    @IntDef({
+//            PERMISSION_GROUP_LOCATION,
+//            PERMISSION_GROUP_LOCATION_ALWAYS,
+//            PERMISSION_GROUP_LOCATION_WHEN_IN_USE,
+//            PERMISSION_GROUP_MEDIA_LIBRARY,
+//            PERMISSION_GROUP_MICROPHONE,
+//            PERMISSION_GROUP_PHONE,
+//            PERMISSION_GROUP_PHOTOS,
+//            PERMISSION_GROUP_REMINDERS,
+//            PERMISSION_GROUP_SENSORS,
+//            PERMISSION_GROUP_SENSORS_ALWAYS,
+//            PERMISSION_GROUP_SMS,
+//            PERMISSION_GROUP_SPEECH,
+//            PERMISSION_GROUP_STORAGE,
+//            PERMISSION_GROUP_IGNORE_BATTERY_OPTIMIZATIONS,
+//            PERMISSION_GROUP_NOTIFICATION,
+//            PERMISSION_GROUP_ACCESS_MEDIA_LOCATION,
+//            PERMISSION_GROUP_ACTIVITY_RECOGNITION,
+//            PERMISSION_GROUP_UNKNOWN,
+//            PERMISSION_GROUP_BLUETOOTH,
+//            PERMISSION_GROUP_MANAGE_EXTERNAL_STORAGE,
+//            PERMISSION_GROUP_SYSTEM_ALERT_WINDOW,
+//            PERMISSION_GROUP_REQUEST_INSTALL_PACKAGES,
+//            PERMISSION_GROUP_ACCESS_NOTIFICATION_POLICY,
+//            PERMISSION_GROUP_BLUETOOTH_SCAN,
+//            PERMISSION_GROUP_BLUETOOTH_ADVERTISE,
+//            PERMISSION_GROUP_BLUETOOTH_CONNECT,
+//            PERMISSION_GROUP_NEARBY_WIFI_DEVICES,
+//            PERMISSION_GROUP_VIDEOS,
+//            PERMISSION_GROUP_AUDIO,
+//            PERMISSION_GROUP_SCHEDULE_EXACT_ALARM,
+//            PERMISSION_GROUP_CALENDAR_WRITE_ONLY,
+//            PERMISSION_GROUP_CALENDAR_FULL_ACCESS,
+//            PERMISSION_GROUP_ASSISTANT
+//    })
+//
+//
+//    @Target(ElementType.TYPE_USE)
+//    @Retention(AnnotationRetention.SOURCE)
+//    @IntDef(
+//        PERMISSION_STATUS_DENIED,
+//        PERMISSION_STATUS_GRANTED,
+//        PERMISSION_STATUS_RESTRICTED,
+//        PERMISSION_STATUS_LIMITED,
+//        PERMISSION_STATUS_NEVER_ASK_AGAIN
+//    )
+//
+//
+//    internal annotation class PermissionGroup
+//    internal annotation class PermissionStatus
+}
