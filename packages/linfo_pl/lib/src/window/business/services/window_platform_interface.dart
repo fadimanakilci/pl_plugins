@@ -9,6 +9,7 @@
  */
 
 import 'package:linfo_pl/src/window/business/controllers/window_channel_controller.dart';
+import 'package:linfo_pl/src/window/domain/sources/keyguard_status_protocol.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import '../../domain/models/window_model.dart';
@@ -45,5 +46,15 @@ interface class WindowPlatformInterface extends PlatformInterface {
   Future<bool> getScreenOn() {
     throw UnimplementedError(
         'getScreenOn has not been implemented.');
+  }
+
+  Future<KeyguardStatusProtocol> requestKeyguard() {
+    throw UnimplementedError(
+        'requestKeyguard has not been implemented.');
+  }
+
+  Future<bool> changeBrightness({double? brightness}) {
+    throw UnimplementedError(
+        'changeBrightness has not been implemented.');
   }
 }

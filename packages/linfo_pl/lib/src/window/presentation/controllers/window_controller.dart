@@ -8,6 +8,8 @@
  * Created by Fadimana Kilci  <fadimekilci07@gmail.com>, February 2024
  */
 
+import 'package:linfo_pl/src/window/domain/sources/keyguard_status_protocol.dart';
+
 import '../../business/services/window_platform_interface.dart';
 import '../../domain/models/window_model.dart';
 
@@ -38,5 +40,15 @@ class WindowController implements WindowPlatformInterface {
   @override
   Future<bool> getScreenOn() {
     return _platform.getScreenOn();
+  }
+
+  @override
+  Future<KeyguardStatusProtocol> requestKeyguard() {
+    return _platform.requestKeyguard();
+  }
+
+  @override
+  Future<bool> changeBrightness({double? brightness}) {
+    return _platform.changeBrightness(brightness: brightness);
   }
 }

@@ -9,6 +9,8 @@
  */
 
 import 'package:flutter/services.dart';
+import 'package:linfo_pl/src/window/domain/sources/keyguard_status_protocol.dart';
+import 'package:linfo_pl/src/window/util/keyguard_status_protocol_parse.dart';
 
 import '../../../utils/logging_util.dart';
 import '../../../utils/method_channel_util.dart';
@@ -60,6 +62,32 @@ class WindowChannelController implements WindowPlatformInterface {
         .then((value) => value!);
 
     LoggingUtil.info('CHECK WINDOW SCREEN ON: $result');
+
+    return result;
+  }
+
+  @override
+  Future<KeyguardStatusProtocol> requestKeyguard() async {
+    KeyguardStatusProtocol result = await _methodChannel
+        .invokeMethod<int?>('requestKeyguard')
+        .then((value) => parseKeyguardStatusProtocols(value));
+
+    LoggingUtil.info('CHECK WINDOW REQUEST KEYGUARD: $result');
+
+    return result;
+  }
+
+  @override
+  Future<bool> changeBrightness({double? brightness}) async {
+    Map<String, dynamic> arguments = {
+      'brightness': brightness,
+    };
+
+    bool result = await _methodChannel
+        .invokeMethod<bool>('changeBrightness', arguments)
+        .then((value) => value!);
+
+    LoggingUtil.info('CHECK CHANGE BRIGHTNESS: $result');
 
     return result;
   }
