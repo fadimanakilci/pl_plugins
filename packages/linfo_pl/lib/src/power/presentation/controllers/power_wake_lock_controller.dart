@@ -40,6 +40,11 @@ class PowerWakeLockController extends PowerWakeLockPlatformInterface {
   }
 
   @override
+  Future<bool?> schedulerWakeUp({double? minutes}) {
+    return _platform.schedulerWakeUp(minutes: minutes);
+  }
+
+  @override
   Future<void> periodicWakeLock({
     int? repeat,
     double? minutes,

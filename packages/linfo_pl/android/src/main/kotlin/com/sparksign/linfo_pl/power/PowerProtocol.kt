@@ -42,7 +42,11 @@ class PowerProtocol(
     }
 
     fun getPowerThermalStatus(): String {
-        return PowerUtil.getThermalStatus(powerManager?.currentThermalStatus)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            PowerUtil.getThermalStatus(powerManager?.currentThermalStatus)
+        } else {
+            PowerUtil.getThermalStatus(0)
+        }
     }
 
     fun getWakeLockState(): Boolean? {
@@ -57,7 +61,7 @@ class PowerProtocol(
                     PowerManager.FULL_WAKE_LOCK,
                     PowerUtil.WL_TAG
                 ).apply {
-                    acquire()
+                    acquire(10*60*1000L /*10 minutes*/)
 //                Log.d(PowerUtil.LOG_TAG, "WakeLock state changed")
 //                setStateListener(Executors.newSingleThreadExecutor()) {
 //                    Log.d(PowerUtil.LOG_TAG, "WakeLock state changed: $it")
@@ -65,7 +69,7 @@ class PowerProtocol(
                 }
             }
         } else if(wakeLock?.isHeld == false) {
-            wakeLock?.acquire()
+            wakeLock?.acquire(10*60*1000L /*10 minutes*/)
         } else {
             throw IllegalStateException("isHeld true")
         }
@@ -132,12 +136,13 @@ class PowerProtocol(
         if(wakeLock == null) {
             wakeLock = powerManager?.run {
                 newWakeLock(
-                    PowerManager.FULL_WAKE_LOCK
-                            or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK or
+                    PowerManager.ACQUIRE_CAUSES_WAKEUP,
                     PowerUtil.WL_TAG
                 ).apply {
-                    acquire(10 * 60 * 1000L)
                     Thread.sleep((_minutes * 60 * 1000L).toLong())
+                    acquire(10 * 60 * 1000L)
+                    Thread.sleep((0.05 * 60 * 1000L).toLong())
                     release()
                 }
             }

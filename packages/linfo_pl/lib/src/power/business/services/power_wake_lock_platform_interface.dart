@@ -45,6 +45,11 @@ abstract class PowerWakeLockPlatformInterface extends PlatformInterface {
         'schedulerWakeLock has not been implemented.');
   }
 
+  Future<bool?> schedulerWakeUp({double? minutes}) {
+    throw UnimplementedError(
+        'schedulerWakeUp has not been implemented.');
+  }
+
   Future<void> periodicWakeLock({
     int? repeat,
     double? minutes,

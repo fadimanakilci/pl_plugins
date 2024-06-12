@@ -60,6 +60,7 @@ class WakeLockStateHandlerImpl(
 
     override fun onCancel(arguments: Any?) {
         events = null
+        context.unregisterReceiver(wakeLockBroadcastReceiver)
 //        powerProtocol.enableWakeLock()
     }
 

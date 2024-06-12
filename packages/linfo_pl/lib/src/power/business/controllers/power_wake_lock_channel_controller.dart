@@ -55,6 +55,23 @@ class PowerWakeLockChannelController extends PowerWakeLockPlatformInterface {
   }
 
   @override
+  Future<bool?> schedulerWakeUp({double? minutes}) async {
+
+    Map<String, double?> arguments = {
+      'minutes': minutes
+    };
+
+    bool? result = await _methodChannel.invokeMethod<bool>(
+      'wakeUpScheduler',
+      arguments,
+    ).then((value) => value);
+
+    LoggingUtil.info('CHECK WAKE UP SCHEDULER: $result');
+
+    return result;
+  }
+
+  @override
   Future<void> periodicWakeLock({
     int? repeat,
     double? minutes,

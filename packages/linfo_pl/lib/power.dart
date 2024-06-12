@@ -58,6 +58,11 @@ Future<bool?> schedulerWakeLock(double? minutes) {
 }
 
 @override
+Future<bool?> schedulerWakeUp({double? minutes}) {
+  return _powerWakeLock.schedulerWakeUp(minutes: minutes);
+}
+
+@override
 Future<void> periodicWakeLock({
   int? repeat,
   double? minutes,
