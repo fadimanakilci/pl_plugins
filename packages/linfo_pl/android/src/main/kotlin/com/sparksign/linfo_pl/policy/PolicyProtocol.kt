@@ -20,6 +20,8 @@ import android.util.Base64
 import android.util.Log
 import io.flutter.plugin.common.PluginRegistry
 
+// TODO: Gereksinimleri karşılayan cihaz ile devam et!!!
+
 class PolicyProtocol(
     private val context             : Context,
     private val activity            : Activity,
@@ -41,45 +43,80 @@ class PolicyProtocol(
         return false
     }
 
-    fun turnOffScreen(password: String = "1937"): Boolean? {
+    fun turnOffScreen(password: String? = null): Boolean? {
         Log.i(PolicyUtil.LOG_TAG, "turnOffScreen")
         Log.i(PolicyUtil.LOG_TAG, "Kontrol component name: $componentName - ${context.packageName}")
         requestAdminPrivilegesIfNeeded()
         if(password.isNullOrEmpty() && devicePolicyManager.isAdminActive(componentName)) {
             Log.i(PolicyUtil.LOG_TAG, "If girdi")
             devicePolicyManager.lockNow()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                Log.i(PolicyUtil.LOG_TAG,
+                "${devicePolicyManager.isAffiliatedUser}\n" +
+                        "${devicePolicyManager.isLogoutEnabled}\n" +
+                        "${devicePolicyManager.activeAdmins}\n" +
+//                        "${devicePolicyManager.isOrganizationOwnedDeviceWithManagedProfile}\n" +
+                        "${devicePolicyManager.isDeviceIdAttestationSupported}\n"
+//                        "${devicePolicyManager.isComplianceAcknowledgementRequired}\n" +
+//                        "${devicePolicyManager.isPreferentialNetworkServiceEnabled}\n" +
+//                        "${devicePolicyManager.isUniqueDeviceAttestationSupported}n" +
+//                        "${devicePolicyManager.isUsbDataSignalingEnabled}\n" +
+//                        "${devicePolicyManager.enrollmentSpecificId}\n" +
+//                        "${devicePolicyManager.minimumRequiredWifiSecurityLevel}\n" +
+//                        "${devicePolicyManager.preferentialNetworkServiceConfigs}\n"
+                )
+            }
             return true
         } else {
             Log.i(PolicyUtil.LOG_TAG, "Else")
             val passwordBytes = Base64.decode(password, Base64.NO_WRAP)
 
-            devicePolicyManager.setPasswordQuality(
-                componentName,
-                DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Log.i(
+                    PolicyUtil.LOG_TAG,
+                    "passwordComplexity: ${devicePolicyManager.passwordComplexity}\n" +
+//                            "${devicePolicyManager.isActivePasswordSufficient}\n" +
+//                            "${devicePolicyManager.isActivePasswordSufficientForDeviceRequirement}\n" +
+                            "${devicePolicyManager.accountTypesWithManagementDisabled}\n" +
+//                            "${devicePolicyManager.requiredPasswordComplexity}\n" +
+                            "${devicePolicyManager.getPasswordMaximumLength(DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED)}\n"
+                )
+//                devicePolicyManager.resetPassword("0000", DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY)
+            }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Log.i(PolicyUtil.LOG_TAG, "Else->If")
-                if (devicePolicyManager.isResetPasswordTokenActive(componentName)) {
-                    Log.i(PolicyUtil.LOG_TAG, "Else->If->If")
-                    devicePolicyManager.resetPasswordWithToken(
-                        componentName, null, passwordBytes, 0
-                    )
-                    return true
-                } else {
-                    Log.i(PolicyUtil.LOG_TAG, "Else->If->Else")
-                    // Try to set again token
-                    // On Android 8+, set reset password token if not active
-                    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                        !devicePolicyManager.isResetPasswordTokenActive(componentName)
-                    ) {
-                        devicePolicyManager.setResetPasswordToken(
-                            componentName, passwordBytes
+            if(devicePolicyManager.isDeviceOwnerApp(componentName.packageName)) {
+                devicePolicyManager.setPasswordQuality(
+                    componentName,
+                    DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED
+                )
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Log.i(PolicyUtil.LOG_TAG, "Else->If")
+                    if (devicePolicyManager.isResetPasswordTokenActive(componentName)) {
+                        Log.i(PolicyUtil.LOG_TAG, "Else->If->If")
+                        devicePolicyManager.resetPasswordWithToken(
+                            componentName, null, passwordBytes, 0
                         )
-                        Log.i(PolicyUtil.LOG_TAG, "Else->If->Else->If")
-                        true
-                    } else false
+                        return true
+                    } else {
+                        Log.i(PolicyUtil.LOG_TAG, "Else->If->Else")
+                        // Try to set again token
+                        // On Android 8+, set reset password token if not active
+                        return if (!devicePolicyManager.isResetPasswordTokenActive(componentName)) {
+                            devicePolicyManager.setResetPasswordToken(
+                                componentName, passwordBytes
+                            )
+                            Log.i(PolicyUtil.LOG_TAG, "Else->If->Else->If")
+                            true
+                        } else false
+                    }
+                } else {
+                    Log.e(PolicyUtil.LOG_TAG, "Android Version < 26")
+                    devicePolicyManager.lockNow()
                 }
+            } else {
+                Log.e(PolicyUtil.LOG_TAG, "Device not owner app!")
+                devicePolicyManager.lockNow()
             }
         }
 
@@ -129,37 +166,6 @@ class PolicyProtocol(
         }
     }
 
-//    private fun initializeIfNeeded() {
-//        if (!isInitialized) {
-//            try {
-//                val appDeviceAdminReceiver = AppDeviceAdminReceiver()
-//                /*appDeviceAdminReceiver.setBootCompletedCallback {
-//                    log("setBootCompletedCallback")
-//                    instance.channel.invokeMethod("handleBootCompleted", null)
-//                }*/
-//                val intentFilter = IntentFilter()
-//                actions.forEach { intentFilter.addAction(it) }
-//                log("actions: ${actions.joinToString(", ") }}")
-//                context.registerReceiver(appDeviceAdminReceiver, intentFilter)
-//                adminComponentName = appDeviceAdminReceiver.getWho(context)
-//                log("registerReceiver packageName: " + adminComponentName.packageName + ", className: " + adminComponentName.className)
-//                mDevicePolicyManager =
-//                    context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-//
-//                val fromBootCompleted = AppDeviceAdminReceiver.isFromBootCompleted(context);
-//                log("fromBootCompleted $fromBootCompleted")
-//                if (fromBootCompleted) {
-//                    channel.invokeMethod("handleBootCompleted", null)
-//                    AppDeviceAdminReceiver.setIsFromBootCompleted(context, false)
-//                }
-//
-//            } catch (e: Exception) {
-//            }
-//        }
-//
-//        isInitialized = true
-//    }
-
     private fun requestAdminPrivilegesIfNeeded() {
         val isDeviceOwnerApp =
             devicePolicyManager.isDeviceOwnerApp(componentName.packageName)
@@ -168,7 +174,7 @@ class PolicyProtocol(
             Log.e(PolicyUtil.LOG_TAG, "isDeviceOwnerApp = false")
         }
 
-        if (devicePolicyManager.isAdminActive(componentName)) {
+        if (!devicePolicyManager.isAdminActive(componentName)) {
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -205,7 +211,7 @@ class PolicyProtocol(
                 "Administrator privileges are required for this app."
             )
 //            activity.finish()
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             activity.startActivityForResult(intent, PolicyUtil.REQUEST_ENABLE)
         } else {
             Log.i(PolicyUtil.LOG_TAG, "Device admin privilege already granted.")
