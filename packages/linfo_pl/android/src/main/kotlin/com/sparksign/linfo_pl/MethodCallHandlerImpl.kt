@@ -45,6 +45,7 @@ class MethodCallHandlerImpl(
         val repeat          : Int?      = call.argument<Int?>("repeat")
         val minutes         : Double?   = call.argument<Double?>("minutes")
         val waitMinutes     : Double?   = call.argument<Double?>("waitMinutes")
+        val brightness      : Float?    = call.argument<Double?>("brightness")?.toFloat()
 
         when(call.method) {
             // NETWORK
@@ -95,6 +96,7 @@ class MethodCallHandlerImpl(
             "wakeLockDisable"       -> result.success(powerProtocol.disableWakeLock())
             "wakeLockState"         -> result.success(powerProtocol.getWakeLockState())
             "wakeLockScheduler"     -> result.success(powerProtocol.enableSchedulerWakeLock(minutes))
+            "wakeUpScheduler"       -> result.success(powerProtocol.enableSchedulerWakeUp(minutes))
             "wakeLockPeriodic"      -> result.success(powerProtocol.enablePeriodicWakeLock(repeat, minutes, waitMinutes))
 
             // WINDOW
@@ -102,6 +104,11 @@ class MethodCallHandlerImpl(
 //            "keepScreenOn"          -> result.success(windowProtocol.keepScreenOn())
             "discardScreenOn"       -> result.success(runBlocking{ windowProtocol.discardScreenOn() })
             "screenOn"              -> result.success(windowProtocol.getScreenOn())
+//            "schedulerWakeup"       -> result.success(windowProtocol.schedulerWakeUp(minutes))
+            "changeBrightness"      -> result.success(windowProtocol.changeBrightness(brightness))
+            "requestKeyguard"       -> windowProtocol.requestKeyguard { result.success(it) }
+
+            "orientationState"      -> result.success(windowProtocol.getOrientationState())
 
             // POLICY
             "turnOffScreen"         -> result.success(policyProtocol.turnOffScreen())

@@ -36,4 +36,7 @@ class MethodChannelUtil {
 
   static const EventChannel windowEventChannel =
   EventChannel('$pluginPath/window');
+
+  static const EventChannel orientationEventChannel =
+  EventChannel('$pluginPath/orientation');
 }

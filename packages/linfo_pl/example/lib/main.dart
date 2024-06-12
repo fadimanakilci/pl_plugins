@@ -35,6 +35,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _linfoPlPlugin = LinfoPl();
 
+  final _messengerKey = GlobalKey<ScaffoldMessengerState>();
+
   List<NetworkProtocol> _connectionStatus = [NetworkProtocol.none];
   BluetoothProtocol _bluetoothState = BluetoothProtocol.unknown;
   bool? _wakeLockState;
@@ -42,23 +44,23 @@ class _MyAppState extends State<MyApp> {
   PowerModel? _powerState;
   ThermalStatusProtocol? _powerThermalState;
   WindowModel? _windowState;
+  OrientationStateProtocol? _orientationState;
+  KeyguardStatusProtocol? _keyguardStatus;
 
-  int _batteryLevel = 0;
-  ChargeProtocol _charging = ChargeProtocol.unknown;
+  final ChargeProtocol _charging = ChargeProtocol.unknown;
 
   ActivityLifecycleProtocol _activityLifecycleState = ActivityLifecycleProtocol.unknown;
 
-  late final StreamSubscription<List<NetworkProtocol>> _networkSubscription;
-  late final StreamSubscription<BluetoothProtocol> _bluetoothSubscription;
-  late final StreamSubscription<PowerModel> _powerSubscription;
-  late final StreamSubscription<ThermalStatusProtocol> _powerThermalSubscription;
-  late final StreamSubscription<WindowModel?> _windowSubscription;
-
-  late final StreamSubscription<BatteryModel>? _batteryEventSubscription;
-  late final StreamSubscription<int> _batteryLevelSubscription;
-  late final StreamSubscription<ChargeProtocol> _chargingSubscription;
-
-  late final StreamSubscription<ActivityLifecycleProtocol> _activityLifecycleSubscription;
+  late final StreamSubscription<List<NetworkProtocol>>      _networkSubscription;
+  late final StreamSubscription<BluetoothProtocol>          _bluetoothSubscription;
+  late final StreamSubscription<PowerModel>                 _powerSubscription;
+  late final StreamSubscription<ThermalStatusProtocol>      _powerThermalSubscription;
+  late final StreamSubscription<WindowModel?>               _windowSubscription;
+  late final StreamSubscription<BatteryModel>?              _batterySubscription;
+  late final StreamSubscription<int>                        _batteryLevelSubscription;
+  late final StreamSubscription<ChargeProtocol>             _chargingSubscription;
+  late final StreamSubscription<ActivityLifecycleProtocol>  _activityLifecycleSubscription;
+  late final StreamSubscription<OrientationStateProtocol>   _orientationSubscription;
 
   @override
   void initState() {
@@ -76,12 +78,11 @@ class _MyAppState extends State<MyApp> {
     _bluetoothSubscription.cancel();
     _powerSubscription.cancel();
     _powerThermalSubscription.cancel();
-
-    _batteryEventSubscription?.cancel();
+    _batterySubscription?.cancel();
     _batteryLevelSubscription.cancel();
     _chargingSubscription.cancel();
-
-    // _activityLifecycleSubscription.cancel();
+    _activityLifecycleSubscription.cancel();
+    _orientationSubscription.cancel();
   }
 
   Future<void> initPlatformState() async {
@@ -96,6 +97,7 @@ class _MyAppState extends State<MyApp> {
       _powerThermalEventStream();
       _activityLifecycleEventStream();
       _windowEventStream();
+      _orientationEventStream();
 
       List<NetworkProtocol>? networkEvent
       = await getNetworkEvent();
@@ -103,16 +105,22 @@ class _MyAppState extends State<MyApp> {
       = await getBluetoothEvent();
       ActivityLifecycleProtocol activityLifecycleState
       = await getActivityLifecycleEvent();
-      int? batteryLevel = await getBatteryLevel();
-
+      int? batteryLevel
+      = await getBatteryLevel();
       ThermalStatusProtocol thermalStatus
       = await getPowerThermalStatus();
+      bool screenOnStatus
+      = await getScreenOn();
+      OrientationStateProtocol orientationState
+      = await getOrientationState();
 
       debugPrint('EventListen listen(): '
           '\n\t$networkEvent\n\t$bluetoothEvent');
       debugPrint('\t$activityLifecycleState');
       debugPrint("Battery Level: $batteryLevel");
       debugPrint("Thermal Status: $thermalStatus");
+      debugPrint("Window Status: $screenOnStatus");
+      debugPrint("Orientation State: $orientationState");
     } on PlatformException {
 
     }
@@ -166,7 +174,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _batteryEventStream() {
-    _batteryEventSubscription = batteryEventStream().listen((BatteryModel event) {
+    _batterySubscription = batteryEventStream().listen((BatteryModel event) {
       debugPrint('EventStreamListen listen(): ${event.toMap()}');
 
       setState(() {
@@ -186,7 +194,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _powerThermalEventStream() {
-    _powerThermalSubscription = powerThermalEventStream().listen((ThermalStatusProtocol event) {
+    _powerThermalSubscription = powerThermalEventStream()
+        .listen((ThermalStatusProtocol event) {
       debugPrint('Power Thermal EventStreamListen listen(): ${event.name}');
 
       setState(() {
@@ -217,10 +226,22 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _orientationEventStream() {
+    _orientationSubscription = orientationEventStream()
+        .listen((OrientationStateProtocol event) {
+      debugPrint('OrientationEventListenThen listen(): $event');
+
+      setState(() {
+        _orientationState = event;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: _messengerKey,
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -249,7 +270,8 @@ class _MyAppState extends State<MyApp> {
                   children: [
                     const Text("POWER:"),
                     const SizedBox(width: 10,),
-                    Expanded(child: Text('${_powerThermalState?.name.toUpperCase()} - $_powerState')),
+                    const Spacer(),
+                    Text('${_powerThermalState?.name} - $_powerState'),
                   ],
                 ),
               ),
@@ -284,8 +306,19 @@ class _MyAppState extends State<MyApp> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("WakeLock: ${_wakeLockState.toString().toUpperCase()}"),
+                    Text("WAKELOCK: $_wakeLockState"),
                     const Spacer(),
+                    TextButton(
+                      onPressed: () async {
+                        bool? result = await schedulerWakeUp();
+                        debugPrint("WakeUp Scheduler Result: $result");
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.grey.shade300,
+                        textStyle: const TextStyle(color: Colors.black)
+                      ),
+                      child: const Text('SCHEDULER WAKEUP'),
+                    ),
                     TextButton(
                       onPressed: () async {
                         bool? result = await schedulerWakeLock(1);
@@ -346,7 +379,32 @@ class _MyAppState extends State<MyApp> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Window: ${_windowState.toString().toUpperCase()}"),
+                    Text("WINDOW: "
+                        "${_windowState?.screenOn ?? '-'} "
+                        "- ${_orientationState?.name ?? '-'}"),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () async {
+                        bool? result = await changeBrightness(brightness: 0.1);
+                        debugPrint("Change Brightness Result: $result");
+                      },
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.grey.shade300,
+                          textStyle: const TextStyle(color: Colors.black)
+                      ),
+                      child: const Text('BRIGHTNESS'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        _keyguardStatus = await requestKeyguard();
+                        _showToast(_keyguardStatus?.name.toUpperCase() ?? '-');
+                      },
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.grey.shade300,
+                          textStyle: const TextStyle(color: Colors.black)
+                      ),
+                      child: const Text('KEYGUARD'),
+                    ),
                     Switch(
                       value: _windowState?.screenOn ?? false,
                       activeColor: Colors.deepPurpleAccent,
@@ -380,7 +438,7 @@ class _MyAppState extends State<MyApp> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Policy: ${_windowState.toString().toUpperCase()}"),
+                    Text("POLICY: ${_windowState?.screenOn}"),
                     TextButton(
                       onPressed: () async {
                         await turnOffScreen();
@@ -403,7 +461,7 @@ class _MyAppState extends State<MyApp> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("BLUETOOTH: ${_bluetoothState.name.toUpperCase()}"),
+                    Text("BLUETOOTH: ${_bluetoothState.name}"),
                     Switch(
                       value: _bluetoothState == BluetoothProtocol.on
                           ? true : false,
@@ -443,8 +501,9 @@ class _MyAppState extends State<MyApp> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "NETWORK: ${_connectionStatus[index].name.toUpperCase()}",
+                          "NETWORK: ${_connectionStatus[index].name}",
                         ),
+                        const Spacer(),
                         Switch(
                           value: _connectionStatus[index] == NetworkProtocol.mobile
                               ? true : false,
@@ -489,6 +548,20 @@ class _MyAppState extends State<MyApp> {
               const SizedBox(height: 40,),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void _showToast(String value) {
+    _messengerKey.currentState!
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+      SnackBar(
+        content: Text(value),
+        action: SnackBarAction(
+            label: 'Ok',
+            onPressed: _messengerKey.currentState!.hideCurrentSnackBar
         ),
       ),
     );

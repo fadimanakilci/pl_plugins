@@ -8,3 +8,10 @@
  * Created by Fadimana Kilci  <fadimekilci07@gmail.com>, February 2024
  */
 
+enum OrientationStateProtocol {
+  left,
+  up,
+  right,
+  down,
+  undefined,
+}

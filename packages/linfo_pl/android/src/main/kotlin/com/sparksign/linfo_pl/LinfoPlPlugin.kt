@@ -2,6 +2,7 @@ package com.sparksign.linfo_pl
 
 import android.app.Activity
 import android.app.Application
+import android.app.KeyguardManager
 import android.app.admin.DevicePolicyManager
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
@@ -41,6 +42,7 @@ import com.sparksign.linfo_pl.power.thermal.ThermalStatusHandlerImpl
 import com.sparksign.linfo_pl.power.wakelock.WakeLockStateHandlerImpl
 import com.sparksign.linfo_pl.window.WindowHandlerImpl
 import com.sparksign.linfo_pl.window.WindowProtocol
+import com.sparksign.linfo_pl.window.orientation.OrientationStateHandlerImpl
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -50,6 +52,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener
 import io.flutter.plugin.common.StandardMethodCodec
+import kotlin.math.absoluteValue
 
 
 /** LinfoPlPlugin */
@@ -68,6 +71,7 @@ class LinfoPlPlugin:
   private var activityPluginBinding:              ActivityPluginBinding?      = null
 
   private var serviceManager:                     ServiceManager?             = null
+  private var keyguardManager:                    KeyguardManager?            = null
   private var batteryManager:                     BatteryManager?             = null
   private var powerManager:                       PowerManager?               = null
   private val bluetoothAdapter:                   BluetoothAdapter?           = null
@@ -85,6 +89,7 @@ class LinfoPlPlugin:
   private lateinit var powerThermalEventChannel:  EventChannel
   private lateinit var wakeLockEventChannel:      EventChannel
   private lateinit var windowEventChannel:        EventChannel
+  private lateinit var orientationEventChannel:   EventChannel
 
   private lateinit var networkProtocol:           NetworkProtocol
   private lateinit var bluetoothProtocol:         BluetoothProtocol
@@ -100,6 +105,7 @@ class LinfoPlPlugin:
   private lateinit var powerThermalReceiver:      ThermalStatusHandlerImpl
   private lateinit var wakeLockReceiver:          WakeLockStateHandlerImpl
   private lateinit var windowReceiver:            WindowHandlerImpl
+  private lateinit var orientationReceiver:       OrientationStateHandlerImpl
   private lateinit var permissionsHandlerImpl:    PermissionsHandlerImpl
 
 
@@ -140,6 +146,9 @@ class LinfoPlPlugin:
     devicePolicyManager =
       context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
 
+    keyguardManager =
+      context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+
     bluetoothManager =
       context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
 
@@ -177,7 +186,7 @@ class LinfoPlPlugin:
     powerProtocol =
       PowerProtocol(context, powerManager)
 
-    windowProtocol = WindowProtocol(context, windowManager, activity!!)
+    windowProtocol = WindowProtocol(context, windowManager, keyguardManager, activity!!)
 
     policyProtocol = PolicyProtocol(context, activity!!, componentName, devicePolicyManager!!)
 
@@ -227,6 +236,9 @@ class LinfoPlPlugin:
     windowEventChannel        = EventChannel(messenger, WINDOW_CHANNEL_NAME)
     windowReceiver            = WindowHandlerImpl(context, windowProtocol)
 
+    orientationEventChannel   = EventChannel(messenger, ORIENTATION_CHANNEL_NAME)
+    orientationReceiver       = OrientationStateHandlerImpl(context, windowProtocol)
+
     networkEventChannel.setStreamHandler(networkReceiver)
     bluetoothEventChannel.setStreamHandler(bluetoothReceiver)
     batteryEventChannel.setStreamHandler(batteryReceiver)
@@ -234,6 +246,7 @@ class LinfoPlPlugin:
     powerThermalEventChannel.setStreamHandler(powerThermalReceiver)
     wakeLockEventChannel.setStreamHandler(wakeLockReceiver)
     windowEventChannel.setStreamHandler(windowReceiver)
+    orientationEventChannel.setStreamHandler(orientationReceiver)
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -245,14 +258,26 @@ class LinfoPlPlugin:
     powerThermalEventChannel.setStreamHandler(null)
     wakeLockEventChannel.setStreamHandler(null)
     windowEventChannel.setStreamHandler(null)
+    orientationEventChannel.setStreamHandler(null)
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-//    binding.activity.window.addFlags(
+    binding.activity.window.addFlags(
 //      WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-//              or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+//              or
+              WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
 //              or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-//    )
+    )
+
+    // TODO: Add Keyguard
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+      binding.activity.setTurnScreenOn(true)
+      binding.activity.setShowWhenLocked(true)
+      // LEVEL 30
+//      binding.activity.setTranslucent(true)
+      // LEVEL 33
+//      binding.activity.setRecentsScreenshotEnabled(false)
+    }
 
     this.activityPluginBinding  = binding
     this.activity               = binding.activity
@@ -357,5 +382,7 @@ class LinfoPlPlugin:
       "com.sparksign.linfo_pl/wakeLock"
     private const val WINDOW_CHANNEL_NAME =
       "com.sparksign.linfo_pl/window"
+    private const val ORIENTATION_CHANNEL_NAME =
+      "com.sparksign.linfo_pl/orientation"
   }
 }
